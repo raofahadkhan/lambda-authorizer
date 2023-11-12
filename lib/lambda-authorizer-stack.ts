@@ -1,6 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
+import * as apigwv2_integrations from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 
 export class LambdaAuthorizerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -15,6 +17,17 @@ export class LambdaAuthorizerStack extends cdk.Stack {
         type: dynamodb.AttributeType.STRING,
       },
       removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
+    const httpApi = new apigwv2.HttpApi(this, `${service}-${stage}`, {
+      apiName: `${service}-${stage}`,
+      description: "This api is responsible for crud operation of user table of dynamodb",
+      corsPreflight: {
+        allowHeaders: ["Content-Type", "Authorization"],
+        allowMethods: [apigwv2.CorsHttpMethod.POST],
+        allowCredentials: false,
+        allowOrigins: ["*"],
+      },
     });
   }
 }
