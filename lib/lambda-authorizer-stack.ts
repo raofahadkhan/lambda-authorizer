@@ -1,16 +1,20 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as cdk from "aws-cdk-lib";
+import { Construct } from "constructs";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 
 export class LambdaAuthorizerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const { service, stage } = props?.tags!;
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'LambdaAuthorizerQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const userTable = new dynamodb.Table(this, `${service}-${stage}-user-table`, {
+      tableName: `${service}-${stage}-user-table`,
+      partitionKey: {
+        name: "user_id",
+        type: dynamodb.AttributeType.STRING,
+      },
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
   }
 }
