@@ -48,6 +48,7 @@ export class LambdaAuthorizerStack extends cdk.Stack {
         TABLE_NAME: userTable.tableName,
       },
       layers: [layer],
+      timeout: cdk.Duration.seconds(30),
     });
 
     const getUsersLambdaAuthorizor = new authorizers.HttpLambdaAuthorizer(
@@ -65,6 +66,7 @@ export class LambdaAuthorizerStack extends cdk.Stack {
         TABLE_NAME: userTable.tableName,
       },
       layers: [layer],
+      timeout: cdk.Duration.seconds(30),
     });
 
     const getUsersLambda = new lambda.Function(this, `${service}-${stage}-get-users-lambda`, {

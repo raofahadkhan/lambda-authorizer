@@ -4,6 +4,7 @@ const AWS = require("aws-sdk");
 
 // export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
 export const handler = async (event: any): Promise<any> => {
+  console.log("lambda authorizer event", event);
   const token = event.headers.Authorization;
 
   const response = {
