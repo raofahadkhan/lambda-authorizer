@@ -89,7 +89,7 @@ export class LambdaAuthorizerStack extends cdk.Stack {
     httpApi.addRoutes({
       path: "/get-users",
       methods: [apigwv2.HttpMethod.POST],
-      integration: createUserLambdaIntegration,
+      integration: getUsersLambdaIntegration,
     });
 
     userTable.grantFullAccess(createUserLambda);

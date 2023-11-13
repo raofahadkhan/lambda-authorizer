@@ -8,6 +8,7 @@ export const handler = async (event: any): Promise<any> => {
 
   let { user_id } = requestBody;
 
+  console.log("user_id", user_id);
   if (!user_id) {
     return {
       statusCode: 400,
