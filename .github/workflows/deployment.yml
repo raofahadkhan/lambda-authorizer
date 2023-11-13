@@ -37,11 +37,11 @@ jobs:
         run: npm install --force
 
       # INSTALL LAMBDA DEPENDENCIES
-      - name: Install Lambda Dependencies
-        run: |
-          cd ./lambda
-          npm install --force
-          cd ../
+      # - name: Install Lambda Dependencies
+      #   run: |
+      #     cd ./lambda
+      #     npm install --force
+      #     cd ../
 
       # BUILD
       - name: Build (using Typescript)
