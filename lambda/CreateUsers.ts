@@ -20,7 +20,7 @@ export const handler = async (event: any): Promise<any> => {
   const params = {
     TableName: process.env.TABLE_NAME!,
     Item: {
-      user_id: 1,
+      user_id: "1",
       name: name,
       age: age,
       email: email,
