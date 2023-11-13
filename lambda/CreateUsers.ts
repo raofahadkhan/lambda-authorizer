@@ -1,4 +1,5 @@
-import * as AWS from "aws-sdk";
+// import * as AWS from "aws-sdk";
+const AWS = require("aws-sdk");
 // import { v4 as uuidv4 } from "uuid";
 // import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 const dynamodb = new AWS.DynamoDB.DocumentClient();
