@@ -3,6 +3,8 @@ import { Construct } from "constructs";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
 import * as apigwv2_integrations from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import * as authorizers from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
+
 import * as lambda from "aws-cdk-lib/aws-lambda";
 
 export class LambdaAuthorizerStack extends cdk.Stack {
@@ -48,6 +50,12 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       layers: [layer],
     });
 
+    const getUsersLambdaAuthorizor = new authorizers.HttpLambdaAuthorizer(
+      `${service}-${stage}-get-users-lambda-authorizor`,
+      lambdaAuthorizor,
+      { responseTypes: [authorizers.HttpLambdaResponseType.SIMPLE] }
+    );
+
     const createUserLambda = new lambda.Function(this, `${service}-${stage}-create-users-lambda`, {
       functionName: `${service}-${stage}-create-users-lambda`,
       runtime: lambda.Runtime.NODEJS_18_X,
@@ -90,9 +98,11 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       path: "/get-users",
       methods: [apigwv2.HttpMethod.POST],
       integration: getUsersLambdaIntegration,
+      authorizer: getUsersLambdaAuthorizor,
     });
 
     userTable.grantFullAccess(createUserLambda);
     userTable.grantFullAccess(getUsersLambda);
+    userTable.grantFullAccess(lambdaAuthorizor);
   }
 }
