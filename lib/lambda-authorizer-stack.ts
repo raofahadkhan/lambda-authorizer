@@ -69,5 +69,18 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       },
       layers: [layer],
     });
+
+    const createUserLambdaIntegration = new apigwv2_integrations.HttpLambdaIntegration(
+      `${service}-${stage}-create-user-lambda-integration`,
+      createUserLambda
+    );
+
+    httpApi.addRoutes({
+      path: "/create-user",
+      methods: [apigwv2.HttpMethod.POST],
+      integration: createUserLambdaIntegration,
+    });
+
+    userTable.grantFullAccess(createUserLambda);
   }
 }
