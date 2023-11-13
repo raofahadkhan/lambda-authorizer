@@ -93,5 +93,6 @@ export class LambdaAuthorizerStack extends cdk.Stack {
     });
 
     userTable.grantFullAccess(createUserLambda);
+    userTable.grantFullAccess(getUsersLambda);
   }
 }
