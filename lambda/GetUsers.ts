@@ -1,0 +1,42 @@
+// import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
+const AWS = require("aws-sdk");
+const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+// export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+export const handler = async (event: any): Promise<any> => {
+  const requestBody = JSON.parse(event.body!);
+
+  let { user_id } = requestBody;
+
+  if (!user_id) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Bad Request! user_id is required" }),
+    };
+  }
+
+  const params = {
+    TableName: process.env.TABLE_NAME!,
+    KeyConditionExpression: "#pk = :pk",
+    ExpressionAttributeNames: {
+      "#pk": "user_id",
+    },
+    ExpressionAttributeValues: {
+      ":pk": user_id,
+    },
+  };
+
+  try {
+    const items = await dynamodb.query(params).promise();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ data: items.Items }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error }),
+    };
+  }
+};
