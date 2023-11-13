@@ -31,6 +31,12 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       },
     });
 
+    const layer = lambda.LayerVersion.fromLayerVersionArn(
+      this,
+      `${service}-${stage}-layer`,
+      `arn:aws:lambda:us-east-1:015783570782:layer:lambda-layers-${stage}-layer:1`
+    );
+
     const lambdaAuthorizor = new lambda.Function(this, `${service}-${stage}-lambda`, {
       functionName: `${service}-${stage}-lambda`,
       runtime: lambda.Runtime.NODEJS_18_X,
@@ -39,6 +45,7 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       environment: {
         TABLE_NAME: userTable.tableName,
       },
+      layers: [layer],
     });
 
     const createUserLambda = new lambda.Function(this, `${service}-${stage}-create-users-lambda`, {
@@ -49,6 +56,7 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       environment: {
         TABLE_NAME: userTable.tableName,
       },
+      layers: [layer],
     });
 
     const getUsersLambda = new lambda.Function(this, `${service}-${stage}-get-users-lambda`, {
@@ -59,6 +67,7 @@ export class LambdaAuthorizerStack extends cdk.Stack {
       environment: {
         TABLE_NAME: userTable.tableName,
       },
+      layers: [layer],
     });
   }
 }
